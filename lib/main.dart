@@ -61,7 +61,8 @@ class Dock<T> extends StatefulWidget {
   State<Dock<T>> createState() => _DockState<T>();
 }
 
-/// AnimatedItem Widget that hold both [Draggable] and [dragTarget] widget for reorder
+/// [AnimatedItem] Widget that hold both [Draggable] and [dragTarget] widget for reorder
+/// It is the Items for the dock.
 class AnimateItem extends StatefulWidget {
   /// This is the common animation duration for animations.
   final int animationDuration;
@@ -72,9 +73,10 @@ class AnimateItem extends StatefulWidget {
   /// This will hold position of a specific [dock] Item.
   final int index;
 
+  ///  [onAcceptWithDetails] is the call back function when space item accepted the dragged item.
+  ///
   ///  [draggedIndex] Value will get where item should removed and replace to new index.
   ///  [replaceIndex] This will give exact index to be replaced.
-  /// [onAcceptWithDetails].
   final Function(int draggedIndex, int replaceIndex)? onAcceptWithDetails;
 
   const AnimateItem(
@@ -92,7 +94,7 @@ class _AnimateItemState extends State<AnimateItem> {
   final GlobalKey _widgetKey = GlobalKey();
 
   /// 0=center,1=left,2=right,-1=none
-  /// This value indicate the sliding animation for which site to give space for
+  /// [side] value indicate the sliding animation for which site to give space for
   /// draggable item.
   int side = 0;
 
@@ -135,7 +137,6 @@ class _AnimateItemState extends State<AnimateItem> {
                 replaceIndex = 0;
               }
             }
-            // shouldIncrease = (side == 2);
           }
           widget.onAcceptWithDetails!(receivedIcon.data, replaceIndex);
         }
@@ -280,8 +281,7 @@ class _DockState<T> extends State<Dock<T>> {
         children: [
           ...List.generate(_items.length, (index) {
             /// Here we are using one [GlobalKey] to make sure state management
-            /// work correctly other wise reflection
-            /// will stay there for that item.
+            /// work correctly other wise reflection will stay there for that item.
             return AnimateItem(
               key: receivedIndex != null && receivedIndex == index
                   ? GlobalKey()
